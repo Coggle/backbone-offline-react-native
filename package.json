@@ -1,0 +1,25 @@
+{
+  "name": "backbone-offline-react-native",
+  "version": "0.0.1",
+  "description": "Queuing of changes made to models and collections while offline, using react-native-simple-store",
+  "main": "backbone.queue.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coggle/backbone-offline-react-native.git"
+  },
+  "author": "Andy Pritchard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Coggle/backbone-offline-react-native/issues"
+  },
+  "homepage": "https://github.com/Coggle/backbone-offline-react-native#readme",
+  "dependencies": {
+    "async": "^1.5.2",
+    "backbone-models-react-native": "0.0.1",
+    "react-native-simple-store": "^1.0.1",
+    "underscore": "^1.8.3"
+  }
+}
