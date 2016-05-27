@@ -123,7 +123,7 @@ Backbone.Collection.prototype.enableQueue = function(callback) {
     // propagate queuing down to models in the collection
     // for existing models and all future models
     this.on('add', function(model){ model.enableQueue(); });
-    async.each(this, function(model, cb){
+    async.each(this.models, function(model, cb){
         model.enableQueue(cb);
     }, function() {
         this.processQueue(callback);
