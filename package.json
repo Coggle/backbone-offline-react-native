@@ -1,6 +1,6 @@
 {
   "name": "backbone-offline-react-native",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Queuing of changes made to models and collections while offline, using react-native-simple-store",
   "main": "backbone.queue.js",
   "scripts": {
