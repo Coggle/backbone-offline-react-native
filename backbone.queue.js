@@ -48,7 +48,8 @@ Backbone.Model.prototype.enableQueue = function() {
         // delta object to storage
         this.set(attrs);
 
-        // take a copy of what should be changed int he this save operation
+        // take a copy of what should be saved into the state 
+        // by this call to save()
         var changesSinceLastSave = _.clone(delta);
 
         // if the model has not yet been saved to the server at all
@@ -233,12 +234,19 @@ Backbone.Collection.prototype.enableQueue = function() {
     }
 };
 
-
+// this is the function that does the work to restore any changes
+// saved into the persistent storage to the model and save the 
+// model back to the server
+// deletions, creations and updates are treated separately
 Backbone.Collection.prototype.processQueue = function(callback) {
     this.enableQueue();
 
     var collection = this;
 
+    // destructions are stored as a list of IDs, so load the IDs
+    // and try to restore the models if they're still in the collections
+    // otherwise silently create a new model in the collection and 
+    // then trigger a destruction
     var processDestructions = function(callback) {
         Store.get(this.pendingChangesStorageKey('destroy')).then(function(value){
             this._pending_model_destroy_queue = (value && value.destroy_queue) || [];
@@ -264,6 +272,10 @@ Backbone.Collection.prototype.processQueue = function(callback) {
         }.bind(this));
     }.bind(this);
 
+    // creations are stored as a list of IDs, the ids reference a full set of 
+    // attributes for that should be created. The model is restored and then
+    // saved to the server in the saveModelChanges step by calling processQueue 
+    // on the model.
     var processCreations = function(callback) {
         Store.get(this.pendingChangesStorageKey('create')).then(function(value){
             this._pending_model_create_queue = (value && value.create_queue) || [];            
@@ -284,6 +296,8 @@ Backbone.Collection.prototype.processQueue = function(callback) {
         }.bind(this));
     }.bind(this);
 
+    // for each model, load any changes stored in persistent storage
+    // and trigger a save to either update or create the model.
     var saveModelChanges = function(callback) {
         async.map(this.models, function(model, cb) {
             model.processQueue(cb);
